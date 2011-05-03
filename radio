@@ -8,7 +8,8 @@ VERSION=0.2
 # HISTORY
 #
 # 0.2
-#	Use ffmpeg:// uri syntax for http (fixes support for some flv)
+#     - Use ffmpeg:// uri syntax for http (fixes support for some flv)
+#     - Drop stations from package
 #
 # 0.1
 #	Fixed dialog calls to support version 1.x
