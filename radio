@@ -2,16 +2,15 @@
 
 #echo $LINES x $COLUMNS
 
-VERSION=0.3dev
+VERSION=0.2
 
 #
 # HISTORY
 #
-# 0.3 - ???
-#
 # 0.2 - May 3 2011
 #  o Use ffmpeg:// uri syntax for http (fixes support for some flv)
 #  o Drop stations from package
+#  o Fix run in absence of stations
 #
 # 0.1
 #	Fixed dialog calls to support version 1.x
@@ -39,7 +38,7 @@ ChooseStation()
 	dirs=`echo ${RADIOPATH} | tr ':' ' '`
 	stations=`find ${dirs} -type f 2> /dev/null`
 	if test -z "$stations"; then
-		echo "No available stations"
+		echo "No available stations" >&2
 		return;
 	fi
 
