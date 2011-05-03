@@ -1,0 +1,46 @@
+= What is it
+
+A simple dialog-based internet radio tuner.
+
+= Motivations
+
+Listening to music shouldn't require a complex graphical
+user interface. Also, it is nice to be able to control
+what's beeing played from wherever on the house network.
+Finally, the members of my family are not inclined to 
+tecnology, so a simple interface enables them to use it.
+
+= Requirements
+
+Uses mplayer for playing, alsamixer for setting volume,
+dialog for the interface. Reads station urls from files
+in a PATH (/etc/radio, $HOME/.radio).
+
+= Obtaining station files
+
+To extract a station url you usually read the source of the html
+page serving the stream and seek for the EMBED tag. That tag
+would have a parameter looking like a filename. Append the filename
+to the baseurl and you should get a datafile containing the url
+of the stream. You can just drop that datafile under /etc/radio
+giving it a meaningful name for you.
+
+See also http://strk.keybit.net/code/radio/ for station file collections.
+
+= Install
+
+Copy the 'radio' script somewhere in your PATH.
+The 'stations' directory contains some station files you can
+copy to /etc/radio or $HOME/.radio. Note that lines starting with 
+the hash char (#) are comments, and I use them to remember
+where did I get the stream url from, and how (in case stream
+stops working).
+
+= Limitations (TODO)
+
+ - doesn't show mplayer output. Would be useful for debugging,
+   and also to see the cache is filling.
+
+ - doesn't store station being played on the filesystem, so
+   another instance won't recognize a station is already playing.
+

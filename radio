@@ -1,0 +1,107 @@
+#!/bin/sh
+
+#echo $LINES x $COLUMNS
+
+VERSION=0.2
+
+#
+# HISTORY
+#
+# 0.2
+#	Use ffmpeg:// uri syntax for http (fixes support for some flv)
+#
+# 0.1
+#	Fixed dialog calls to support version 1.x
+#
+# 0.0
+#	Initial release
+#
+#
+
+# Set this variable to "1" to provide compatibility
+# with older versions of dialog which assumed  that 
+# if  the script redirects the standard output, that
+# the "--stdout" option was given.
+#export DIALOG_TTY=1
+
+RADIOPATH="/etc/radio/:$HOME/.radio"
+
+TMPDIR="/tmp/`basename $0`-$$"
+trap 'rm -Rf ${TMPDIR}' 0
+#trap 'echo ${TMPDIR}' 0
+mkdir ${TMPDIR}
+
+ChooseStation()
+{
+	dirs=`echo ${RADIOPATH} | tr ':' ' '`
+	stations=`find ${dirs} -type f 2> /dev/null`
+	if test -z "$stations"; then
+		echo "No available stations"
+		return;
+	fi
+
+	#echo "Stations: ${stations}"
+
+	menu=''; tag=1;
+	exec 3> ${TMPDIR}/menu
+	exec 4> ${TMPDIR}/stations
+	for s in ${stations}; do
+		echo $tag `basename $s` >&3
+		echo $tag $s >&4
+		tag=$(($tag+1))
+	done
+
+	dialog --stdout \
+		--menu \
+		"- version $VERSION -\nChoose a station" \
+		0 0 0 \
+		`cat ${TMPDIR}/menu`
+}
+
+PlayMenu()
+{
+	Choice=$1
+	file=`grep -w "^${Choice}" ${TMPDIR}/stations | cut -d' ' -f2-`
+
+	station=`basename $file`
+
+	url=`cat $file | grep -v ^#`
+	if expr match "${url}" ^http > /dev/null; then
+		url=ffmpeg://"${url}"
+	fi
+
+	# For debugging
+	#echo "Choice: $Choice"
+	#echo "File: $file"
+	#echo "Station: $station"
+	#echo "URL: $url"
+	#exit;
+
+	mplayer "${url}" < /dev/null > /dev/null 2>&1 &
+	playpid=$!
+
+	while :; do
+		w=`dialog --stdout --menu "Playing $station" 0 0 0 1 "Stop" 2 "Volume"`
+		if test "$w" = '1'; then
+			kill $playpid
+			return
+		elif test "$w" = '2'; then
+			alsamixer
+		fi
+	done
+
+}
+
+MainMenu()
+{
+	Choice=`ChooseStation`
+	if test -z "$Choice"; then
+		exit;
+	fi
+	PlayMenu "$Choice"
+}
+
+while :; do
+	MainMenu
+done
+
