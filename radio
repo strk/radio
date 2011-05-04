@@ -2,12 +2,12 @@
 
 #echo $LINES x $COLUMNS
 
-VERSION=0.3dev
+VERSION=0.3
 
 #
 # HISTORY
 #
-# 0.3
+# 0.3 - May 4 2011
 #  o Do not redirect input (fixes high CPU)
 #  o Do not use ffmpeg:// prefix if the url doesn't end with .flv
 # 0.2 - May 3 2011
