@@ -2,13 +2,13 @@
 
 #echo $LINES x $COLUMNS
 
-VERSION=0.4dev
+VERSION=0.4
 
 #
 # HISTORY
 #
-# 0.4
-#  ...
+# 0.4 - Mar 28 2012
+#  o Sort stations alphabetically
 # 0.3 - May 4 2011
 #  o Do not redirect input (fixes high CPU)
 #  o Do not use ffmpeg:// prefix if the url doesn't end with .flv
@@ -41,7 +41,7 @@ mkdir ${TMPDIR}
 ChooseStation()
 {
 	dirs=`echo ${RADIOPATH} | tr ':' ' '`
-	stations=`find ${dirs} -type f 2> /dev/null`
+	stations=`find ${dirs} -type f 2> /dev/null | sort`
 	if test -z "$stations"; then
 		echo "No available stations" >&2
 		return;
