@@ -2,11 +2,13 @@
 
 #echo $LINES x $COLUMNS
 
-VERSION=0.4
+VERSION=0.5dev
 
 #
 # HISTORY
 #
+# 0.5 - ???????????
+#  o ....
 # 0.4 - Mar 28 2012
 #  o Sort stations alphabetically
 # 0.3 - May 4 2011
