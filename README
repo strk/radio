@@ -25,6 +25,9 @@ to the baseurl and you should get a datafile containing the url
 of the stream. You can just drop that datafile under /etc/radio
 giving it a meaningful name for you.
 
+The stations/ directory contain some tools to extract stations data
+from other applications.
+
 See also http://strk.keybit.net/code/radio/ for station file collections.
 
 = Install
