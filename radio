@@ -156,7 +156,7 @@ if test -n "$1"; then
 		echo "Cannot find station '${Choice}'" >&2
 		exit 1
 	fi
-	station=`echo "${station_data}" | cut -d:-f1`
+	station=`echo "${station_data}" | cut -d: -f1`
 	url=`echo "${station_data}" | cut -d: -f2-`
 	Play "${url}"
 else
