@@ -9,6 +9,7 @@ VERSION=0.5dev
 #
 # 0.5 - ???????????
 #  o Add Kodi JazzRadio plugin station extracter
+#  o Allow specifying station as pattern on cmdline
 # 0.4 - Mar 28 2012
 #  o Sort stations alphabetically
 # 0.3 - May 4 2011
@@ -40,7 +41,14 @@ trap 'rm -Rf ${TMPDIR}' 0
 #trap 'echo ${TMPDIR}' 0
 mkdir ${TMPDIR}
 
-ChooseStation()
+Play()
+{
+	url="$1"
+	mplayer -noconsolecontrols "${url}" 
+}
+
+
+PrepareStationTags()
 {
 	dirs=`echo ${RADIOPATH} | tr ':' ' '`
 	stations=`find ${dirs} -type f 2> /dev/null | sort`
@@ -60,6 +68,11 @@ ChooseStation()
 		tag=$(($tag+1))
 	done
 
+}
+
+ChooseStation()
+{
+	PrepareStationTags
 	dialog --stdout \
 		--menu \
 		"- version $VERSION -\nChoose a station" \
@@ -67,13 +80,14 @@ ChooseStation()
 		`cat ${TMPDIR}/menu`
 }
 
-PlayMenu()
+FindStation()
 {
 	Choice=$1
-	file=`grep -w "^${Choice}" ${TMPDIR}/stations | cut -d' ' -f2-`
-
+	file=`grep -i "${Choice}" ${TMPDIR}/stations | head -1 | cut -d' ' -f2-`
+	if test -z "${file}"; then
+		exit 1
+	fi
 	station=`basename $file`
-
 	url=`cat $file | grep -v ^#`
 	if expr match "${url}" ^http > /dev/null; then
 	 if expr match "${url}" '.*\.flv' > /dev/null; then
@@ -88,9 +102,29 @@ PlayMenu()
 	#echo "URL: $url"
 	#exit;
 
+	echo "${station}:${url}"
+}
+
+PlayMenu()
+{
+	Choice=$1
+	station_data=`FindStation "${Choice}"`
+	if test -z "${station_data}"; then
+		echo "Cannot find station '${Choice}'" >&2
+		exit 1
+	fi
+	station=`echo "${station_data}" | cut -d: -f1`
+	url=`echo "${station_data}" | cut -d: -f2-`
+
+	# For debugging
+	#echo "Choice: $Choice"
+	#echo "Station: $station"
+	#echo "URL: $url"
+	#exit;
+
 	# check: -quiet -really-quiet
 	# consider: grep StreamTitle
-	mplayer -noconsolecontrols "${url}" > /dev/null 2>&1 &
+	Play "${url}" > /dev/null 2>&1 &
 	playpid=$!
 
 	while :; do
@@ -111,10 +145,23 @@ MainMenu()
 	if test -z "$Choice"; then
 		exit;
 	fi
-	PlayMenu "$Choice"
+	PlayMenu "^${Choice} "
 }
 
-while :; do
-	MainMenu
-done
+if test -n "$1"; then
+	Choice=$1
+	PrepareStationTags
+	station_data=`FindStation "${Choice}"`
+	if test -z "${station_data}"; then
+		echo "Cannot find station '${Choice}'" >&2
+		exit 1
+	fi
+	station=`echo "${station_data}" | cut -d:-f1`
+	url=`echo "${station_data}" | cut -d: -f2-`
+	Play "${url}"
+else
+	while :; do
+		MainMenu
+	done
+fi
 
