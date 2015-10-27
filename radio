@@ -88,7 +88,7 @@ FindStation()
 		exit 1
 	fi
 	station=`basename $file`
-	url=`cat $file | grep -v ^#`
+	url=`cat $file | grep -v ^# | grep -v '^$'`
 	if expr match "${url}" ^http > /dev/null; then
 	 if expr match "${url}" '.*\.flv' > /dev/null; then
 	  url=ffmpeg://"${url}"
