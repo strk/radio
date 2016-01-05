@@ -16,9 +16,5 @@ install:
 install-stations:
 	mkdir -p /etc/radio && \
 	cd /etc/radio && \
-	wget http://strk.keybit.net/code/radio/MiscStations.tgz && \
-	tar xzf MiscStations.tgz && \
-	rm MiscStations.tgz && \
-	wget http://strk.keybit.net/code/radio/JazzRadioStations.tgz && \
-	tar xzf JazzRadioStations.tgz && \
-	rm JazzRadioStations.tgz 
+	wget --quiet -R 'robots.*' -R 'index.html*' --mirror --no-parent --no-directories http://strk.keybit.net/code/radio/stations/ && \
+	rm -f robots.txt
