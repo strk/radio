@@ -16,5 +16,5 @@ install:
 install-stations:
 	mkdir -p /etc/radio && \
 	cd /etc/radio && \
-	wget --quiet -R 'robots.*' -R 'index.html*' --mirror --no-parent --no-directories http://strk.keybit.net/code/radio/stations/ && \
+	wget --quiet -R 'robots.*' -R 'index.html*' --mirror --no-parent --no-directories http://strk.kbt.io/code/radio/stations/ && \
 	rm -f robots.txt
