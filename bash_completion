@@ -1,0 +1,32 @@
+# Worktools commandline completions for bash
+# See http://www.gnu.org/software/bash/manual/bash.html#Programmable-Completion-Builtins
+
+_radiostations()
+{
+	local cur
+  RADIOPATH="/etc/radio/:$HOME/.radio"
+
+	COMPREPLY=()
+	cur=${COMP_WORDS[COMP_CWORD]}
+
+	#echo "(cur=${cur} COMP_CWORD=${COMP_CWORD} LAST=${COMP_WORDS[COMP_CWORD-1]})"
+
+  dirs=`echo ${RADIOPATH} | tr ':' ' '`
+	stations=`find ${dirs} -type f -printf "%f " 2> /dev/null`
+
+	#echo "( stations: ${stations} )"
+
+	if test -z "$stations"; then
+		return 0;
+	fi
+
+	#echo "(cur=${cur} COMP_CWORD=${COMP_CWORD} LAST=${COMP_WORDS[COMP_CWORD-1]})"
+
+	if [ $COMP_CWORD -eq 1 ]; then
+    # TODO: allow for supporting regexp ?
+		COMPREPLY=( $(compgen -o filenames -W "$stations" -- $cur) )
+	fi
+
+  return 0
+}
+complete -F _radiostations radio

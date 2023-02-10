@@ -11,6 +11,9 @@ dist:
 
 install:
 	install -m 755 radio /usr/local/bin/radio
+	if test -d /etc/bash_completion.d; then \
+    cp bash_completion /etc/bash_completion.d/radio; \
+  fi
 	@echo "Don't forget to install stations, see README"
 
 install-stations:
@@ -18,3 +21,4 @@ install-stations:
 	cd /etc/radio && \
 	wget --quiet -R 'robots.*' -R 'index.html*' --mirror --no-parent --no-directories http://strk.kbt.io/code/radio/stations/ && \
 	rm -f robots.txt
+
