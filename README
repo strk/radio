@@ -41,9 +41,20 @@ stops working).
 
 = Limitations (TODO)
 
- - doesn't show mplayer output. Would be useful for debugging,
-   and also to see the cache is filling.
+ - doesn't show mplayer output in interactive mode
+   (it does, when non-interactive, like "radio jazz")
 
- - doesn't store station being played on the filesystem, so
-   another instance won't recognize a station is already playing.
+= Run
 
+Running just `radio` will show a console-based dialog to select a
+radio station (see Obtaining statino files) and then a dialog to stop
+or control volume.
+
+Passing an argument to `radio` will play that station, with mplayer.
+
+= Configuration
+
+Mplayer options can be passed via environment variable
+RADIO_MPLAYER_OPTIONS, example:
+
+  RADIO_MPLAYER_OPTIONS="-nomouseinput" radio jazz

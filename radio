@@ -44,7 +44,7 @@ mkdir ${TMPDIR}
 Play()
 {
 	url="$1"
-	mplayer -noconsolecontrols "${url}" 
+	mplayer ${RADIO_MPLAYER_OPTIONS} -noconsolecontrols "${url}"
 }
 
 
