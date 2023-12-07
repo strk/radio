@@ -4,7 +4,7 @@
 _radiostations()
 {
 	local cur
-  RADIOPATH="/etc/radio/:$HOME/.radio"
+	RADIOPATH="/etc/radio/:$HOME/.radio"
 
 	COMPREPLY=()
 	cur=${COMP_WORDS[COMP_CWORD]}
@@ -27,6 +27,6 @@ _radiostations()
 		COMPREPLY=( $(compgen -o filenames -W "$stations" -- $cur) )
 	fi
 
-  return 0
+	return 0
 }
 complete -F _radiostations radio
