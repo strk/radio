@@ -1,4 +1,4 @@
-# Worktools commandline completions for bash
+# commandline completions for bash
 # See http://www.gnu.org/software/bash/manual/bash.html#Programmable-Completion-Builtins
 
 _radiostations()
@@ -11,7 +11,7 @@ _radiostations()
 
 	#echo "(cur=${cur} COMP_CWORD=${COMP_CWORD} LAST=${COMP_WORDS[COMP_CWORD-1]})"
 
-  dirs=`echo ${RADIOPATH} | tr ':' ' '`
+	dirs=`echo ${RADIOPATH} | tr ':' ' '`
 	stations=`find ${dirs} -type f -printf "%f " 2> /dev/null`
 
 	#echo "( stations: ${stations} )"
@@ -23,7 +23,7 @@ _radiostations()
 	#echo "(cur=${cur} COMP_CWORD=${COMP_CWORD} LAST=${COMP_WORDS[COMP_CWORD-1]})"
 
 	if [ $COMP_CWORD -eq 1 ]; then
-    # TODO: allow for supporting regexp ?
+		# TODO: allow for supporting regexp ?
 		COMPREPLY=( $(compgen -o filenames -W "$stations" -- $cur) )
 	fi
 
